@@ -17,6 +17,69 @@ app.get("/api-test", (req, res) => {
   res.render("apiTest"); // Rendu de la vue apiTest.ejs
 });
 
+function replaceWordsWithEmojis(text) {
+  const wordToEmojiMap = {
+    heureux: "😄",
+    triste: "😢",
+    amour: "❤️",
+    cool: "😎",
+    colère: "😡",
+    rire: "😂",
+    bisous: "😘",
+    yeux: "👀",
+    musique: "🎵",
+    soleil: "☀️",
+    lune: "🌙",
+    étoile: "⭐",
+    chat: "😺",
+    chien: "🐶",
+    fleur: "🌸",
+    "arc-en-ciel": "🌈",
+    café: "☕",
+    gâteau: "🍰",
+    livre: "📖",
+    ordinateur: "💻",
+    téléphone: "📱",
+    voiture: "🚗",
+    avion: "✈️",
+    bateau: "⛵",
+    maison: "🏠",
+    famille: "👨‍👩‍👧‍👦",
+    travail: "💼",
+    argent: "💰",
+    coeur: "💖",
+    heure: "🕒",
+    montagne: "⛰️",
+    plage: "🏖️",
+    forêt: "🌳",
+    sport: "⚽",
+    art: "🎨",
+    film: "🎬",
+    jeu: "🎮",
+    ampoule: "💡",
+    question: "❓",
+    idée: "💡",
+    calendrier: "📅",
+    horloge: "🕰️",
+    cadeau: "🎁",
+    météo: "🌦️",
+    "bonhomme de neige": "☃️",
+    bonjour: "🌞",
+    salut: "👋",
+  };
+
+  // Créez une expression régulière avec tous les mots à remplacer
+  const regex = new RegExp(Object.keys(wordToEmojiMap).join("|"), "gi");
+
+  // Remplacez les mots par leurs emojis correspondants
+  const updatedText = text.replace(
+    regex,
+    (match) => wordToEmojiMap[match.toLowerCase()]
+  );
+
+  return updatedText;
+}
+
 function getMessages(callback) {
   fs.readFile(filePath, "utf8", (err, data) => {
     if (err) {
@@ -47,6 +110,7 @@ function addMessage(newMessage) {
       }
 
       const file = JSON.parse(data);
+      newMessage.message = replaceWordsWithEmojis(newMessage.message); // Remplacez le texte par sa version emoji
       file.messages.push(newMessage);
 
       fs.writeFile(filePath, JSON.stringify(file), (err) => {
@@ -87,6 +151,7 @@ async function updateMessage(id, updatedMessage) {
       throw new Error("Message non trouvé");
     }
 
+    updatedMessage.message = replaceWordsWithEmojis(updatedMessage.message); // Remplacez le texte par sa version emoji
     file.messages[messageIndex] = {
       ...file.messages[messageIndex],
       ...updatedMessage,
