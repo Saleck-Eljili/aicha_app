@@ -1,0 +1,44 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    font-family: Arial, sans-serif;
+  }
+  
+  #chat-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  
+  #chat-window {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 20px;
+    background: #f9f9f9;
+    border: 1px solid #ccc;
+    border-bottom: none;
+  }
+  
+  #output {
+    white-space: pre-wrap; /* Ensures text wraps */
+  }
+  
+  #message-input {
+    border: 1px solid #ccc;
+    border-top: none;
+    padding: 10px;
+    width: calc(100% - 22px); /* Subtract border and padding */
+  }
+  
+  #send-button {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+  
+  #send-button:hover {
+    background: #0056b3;
+  }
+  

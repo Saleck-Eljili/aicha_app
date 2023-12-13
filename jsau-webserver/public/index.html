@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Messages</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('/messages')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erreur de réseau');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const messagesDiv = document.getElementById('messages');
+                    data.messages.forEach(msg => {
+                        const messageElement = document.createElement('div');
+                        messageElement.textContent = `Sender: ${msg.sender}, Message: ${msg.message}, Receiver: ${msg.receiver}`;
+                        messagesDiv.appendChild(messageElement);
+                    });
+                })
+                .catch(error => {
+                    window.location.href = '/404.html'; // Redirection vers la page 404
+                });
+        });
+    </script>
+</head>
+<body>
+    <h1>Messages</h1>
+    <div id="messages"></div>
+</body>
+</html>

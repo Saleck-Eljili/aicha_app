@@ -1,0 +1,37 @@
+{
+  "name": "jsau-apiserver",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "posttest": "npm run lint",
+    "pretest:ci": "npm run lint",
+    "start": "node index.js",
+    "coverage": "nyc npm test"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "eslint": "^8.53.0",
+    "eslint-config-usecases": "^3.1.0",
+    "jest": "^29.7.0",
+    "mocha": "^10.2.0",
+    "nyc": "^15.1.0",
+    "supertest": "^6.3.3"
+  },
+  "mocha": {
+    "spec": "app.test.js"
+  },  
+  "nyc": {
+    "reporter": ["text", "html"],
+    "include": ["src/**/*.js"]
+  }
+  
+}

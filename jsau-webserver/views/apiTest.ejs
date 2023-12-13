@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Test API</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            margin: auto;
+            width: 80%;
+            max-width: 600px;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        input, textarea, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .message {
+            text-align: left;
+            background-color: #eeeeee;
+            padding: 10px;
+            margin-top: 10px;
+            border-left: 3px solid #007bff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>API Test Interface</h1>
+
+        <!-- POST Form -->
+        <form id="postForm">
+            <input type="text" id="postName" placeholder="Nom" required>
+            <input type="text" id="postReceiver" placeholder="Destinataire" required>
+            <textarea id="postMessage" placeholder="Message" required></textarea>
+            <button type="submit">Envoyer (POST)</button>
+        </form>
+
+        <!-- PUT Form -->
+        <form id="putForm">
+            <input type="text" id="putId" placeholder="ID du message" required>
+            <input type="text" id="putName" placeholder="Nom">
+            <input type="text" id="putReceiver" placeholder="Destinataire">
+            <textarea id="putMessage" placeholder="Nouveau message"></textarea>
+            <button type="submit">Modifier (PUT)</button>
+        </form>
+
+        <!-- DELETE Form -->
+        <form id="deleteForm">
+            <input type="text" id="deleteId" placeholder="ID du message à supprimer" required>
+            <button type="submit">Supprimer (DELETE)</button>
+        </form>
+
+        <!-- GET Button -->
+        <button id="getButton">Afficher les messages (GET)</button>
+        <div id="messages"></div>
+    </div>
+
+    <script>
+        document.getElementById('postForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('postName').value;
+            const receiver = document.getElementById('postReceiver').value;
+            const message = document.getElementById('postMessage').value;
+
+            fetch('/message', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ sender: name, receiver, message })
+            }).then(response => response.json())
+              .then(data => {
+                  alert(data.message);
+                  if (data.status === 'success') {
+                      document.getElementById('postForm').reset();
+                  }
+              })
+              .catch(error => alert('Error:', error));
+        });
+
+        document.getElementById('putForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const id = document.getElementById('putId').value;
+            const name = document.getElementById('putName').value;
+            const receiver = document.getElementById('putReceiver').value;
+            const message = document.getElementById('putMessage').value;
+
+            fetch('/message/' + id, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ sender: name, receiver, message })
+            }).then(response => response.json())
+              .then(data => alert(data.message))
+              .catch(error => alert('Error:', error));
+        });
+
+        document.getElementById('deleteForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const id = document.getElementById('deleteId').value;
+
+            fetch('/message/' + id, {
+                method: 'DELETE'
+            }).then(response => response.json())
+              .then(data => alert(data.message))
+              .catch(error => alert('Error:', error));
+        });
+
+        document.getElementById('getButton').addEventListener('click', function() {
+            fetch('/messages')
+                .then(response => response.json())
+                .then(data => {
+                    const messagesDiv = document.getElementById('messages');
+                    messagesDiv.innerHTML = '';
+                    data.messages.forEach(msg => {
+                        const messageElement = document.createElement('div');
+                        messageElement.classList.add('message');
+                        messageElement.textContent = `ID: ${msg.id}, Nom: ${msg.sender}, Destinataire: ${msg.receiver}, Message: ${msg.message}, Timestamp: ${msg.timestamp}`;
+                        messagesDiv.appendChild(messageElement);
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>
