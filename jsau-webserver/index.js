@@ -3,8 +3,10 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const fs = require("fs");
+const cors = require("cors"); // Importez le package CORS
 const { v4: uuidv4 } = require("uuid");
 const app = express();
+app.use(cors());
 app.use(bodyParser.json());
 
 app.set("view engine", "ejs"); // Définir EJS comme moteur de template
