@@ -17,7 +17,7 @@ export default {
     messages: Array,
   },
   methods: {
-    ddeleteMessage(id) {
+    deleteMessage(id) {
   fetch(`http://localhost:3000/message/${id}`, { method: 'DELETE' })
     .then(response => {
       if (!response.ok) {
