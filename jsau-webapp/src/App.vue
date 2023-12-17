@@ -6,7 +6,6 @@
 </template>
 
 <script>
-import axios from "axios";
 import MessagesList from "./components/MessagesList.vue";
 import AddMessageForm from "./components/AddMessageForm.vue";
 
@@ -23,16 +22,21 @@ export default {
   },
   methods: {
     fetchMessages() {
-      axios
-        .get("http://localhost:3000/messages")
-        .then((response) => {
-          // Si votre serveur renvoie déjà un objet JSON, utilisez simplement response.data
-          this.messages = response.data.messages;
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    },
+  fetch('http://localhost:3000/messages')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      this.messages = data.messages;
+    })
+    .catch(error => {
+      console.error('Fetch error:', error);
+    });
+}
+
   },
   mounted() {
     this.fetchMessages();

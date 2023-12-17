@@ -11,23 +11,25 @@
 </template>
 
 <script>
-import axios from "axios";
 
 export default {
   props: {
     messages: Array,
   },
   methods: {
-    deleteMessage(id) {
-      axios
-        .delete(`http://localhost:3000/message/${id}`)
-        .then(() => {
-          this.$emit("message-deleted");
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    },
+    ddeleteMessage(id) {
+  fetch(`http://localhost:3000/message/${id}`, { method: 'DELETE' })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      this.$emit('message-deleted');
+    })
+    .catch(error => {
+      console.error('Fetch error:', error);
+    });
+}
+
   },
 };
 </script>

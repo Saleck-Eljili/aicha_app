@@ -9,7 +9,6 @@
 </template>
 
 <script>
-import axios from "axios";
 
 export default {
   data() {
@@ -19,16 +18,28 @@ export default {
   },
   methods: {
     submitForm() {
-      axios
-        .post("http://localhost:3000/message", { message: this.newMessage })
-        .then(() => {
-          this.newMessage = "";
-          this.$emit("message-added");
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    },
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ message: this.newMessage })
+  };
+
+  fetch('http://localhost:3000/message', requestOptions)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(() => {
+      this.newMessage = '';
+      this.$emit('message-added');
+    })
+    .catch(error => {
+      console.error('Fetch error:', error);
+    });
+}
+
   },
 };
 </script>
